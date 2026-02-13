@@ -1,0 +1,13 @@
+npm WARN deprecated Visit https://istanbul.js.org/integrations for other alternatives.
+npm WARN deprecated circular-json@0.5.9: CircularJSON is in maintenance only, flatted is its successor.
+npm WARN deprecated uws@9.148.0: New code is available at github.com/uNetworking/uWebSockets.js
+npm ERR! Error while executing:
+npm ERR! <C:\Program Files\Git\cmd\git.EXE> ls-remote -h -t ssh://git@github.com/pemrouz/buble.git
+npm ERR!
+npm ERR! git@github.com: Permission denied (publickey).
+npm ERR! fatal: Could not read from remote repository.
+npm ERR!
+npm ERR! Please make sure you have the correct access rights
+npm ERR! and the repository exists.
+npm ERR!
+npm ERR! exited with error code: 128

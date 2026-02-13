@@ -1,0 +1,68 @@
+
+
+from Vijendra soni (internal) to everyone:
+
+•    Review of codebase front end << Girish>>
+•    Review of codebase back end <<Jiby>>
+•    Review of CI Scripts << Jiby with Team>>
+•    Review of CD Scripts << Girish with Team>>
+•    Review of Advance Feature config and scripts << Vinay with team>>
+
+https:\\google.github.io/styleguide/javaguide.html
+
+
+Sonar Qube
+
+Check Major and Minor Issues
+
+what is Lint why we need to Verified
+
+
+
+
+
+
+
+
+Dec 21st Session:
+
+
+Discussed about the tools which currentlly 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
