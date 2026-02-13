@@ -1,0 +1,23 @@
+---
+- name: RabbitMQ Dependency Application Bounce
+  hosts: "{{Environment}}"
+
+  vars_files:
+    - "../environments/{{pod}}/hosts/group_vars/var.yml"
+  become: true
+  become_method: sudo
+  become_flags: "-ui"
+  become_user: "{{ ansible_become_user }}"
+  gather_facts: True
+#  serial: "{{ serial_opts|default('1') }}"
+  connection: ssh
+  vars:
+    ansible_become_user: "{{ ansible_become_user }}"
+    register: "{{ cluster }}"
+
+  environment:
+    TEMP: "{{user_home}}/apps/tmp"
+
+  tasks:
+     - include_role:
+         name: "../roles/rabbit_bounce"

@@ -1,0 +1,15 @@
+- hosts: all
+  become: true
+  become_method: sudo
+  become_user: dst
+  tasks:
+    - name: User name
+      command: whoami
+    - name: Path working directory
+      command: pwd
+    - name: Ensure the directory /path/to/directory exists
+      file:
+        path: /ngs/app/dst/scripts
+        state: directory
+        mode: '0755'
+  gather_facts: true

@@ -1,0 +1,18 @@
+---
+
+- name: RabbitMQ Shovel
+  hosts: "{{SRC}}"
+  become: true
+  become_method: sudo
+  become_user: "{{ user }}"
+  vars:
+    user: dsp
+  tasks:
+    - include_role:
+        name: "../roles/rabbitshovel"
+      when:  action == 'create'
+
+    - include_role:
+        name: "../roles/rabbitshovel_delete"
+      when:  action == 'delete'
+  gather_facts: true

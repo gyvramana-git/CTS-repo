@@ -1,0 +1,42 @@
+---
+
+- name: Cyclops application deployment
+  hosts: "{{ Environment }}_{{ app_name }}_{{grp}}"
+  vars_files:
+    - "../environments/{{pod}}/{{ Environment }}/hosts/group_vars/var.yml"
+
+  become: true
+  become_method: sudo
+  become_user: "{{ ansible_become_user }}"
+  vars:
+    app_name: Cyclops
+    app_port: "{{ Cyclops_port }}"
+    app_version: "{{ Cyclops_version }}"
+    expose_port: "{{ Cyclops_env_port }}"
+    expose_port1: "{{ Cyclops_env_port1 }}"
+    expose_port2: "{{ Cyclops_env_port2 }}"
+    ansible_become_user: "{{ ansible_become_user }}"
+    token: "{{ token }}"
+    vault_pass: "{{ vault_pass }}"
+    docker_user: "{{docker_user}}"
+
+  environment:
+    TEMP: "{{user_home}}/apps/tmp"
+
+  tasks:
+#     - include_role:
+#         name: "../roles/shield_disable"
+#       when:  (pod != 'QA' and Environment != 'ncauto' and traffic != 'netscalar')
+
+     - include_role:
+         name: "../roles/cyclops"
+
+#     - include_role:
+#         name: "../roles/shield_enable"
+#       when:  (pod != 'QA' and Environment != 'ncauto' and traffic != 'netscalar')
+
+  gather_facts: true
+  post_tasks:
+    - include_role:
+        name: "../roles/post"
+      when: pod == 'QA'

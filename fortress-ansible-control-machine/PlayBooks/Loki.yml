@@ -1,0 +1,34 @@
+---
+
+- name: Loki application deployment
+  hosts: "{{ Environment }}_{{ app_name }}_{{grp}}"
+  vars_files:
+    - "../environments/{{pod}}/{{ Environment }}/hosts/group_vars/var.yml"
+
+  become: true
+  become_method: sudo
+  become_user: "{{ ansible_become_user }}"
+  vars:
+    app_name: Loki
+    app_port: "{{ Loki_port }}"
+    app_version: "{{ Loki_version }}"
+    expose_port: "{{ Loki_env_port }}"
+    ansible_become_user: "{{ ansible_become_user }}"
+    token: "{{ token }}"
+    vault_pass: "{{ vault_pass }}"
+    docker_user: "{{docker_user}}"
+
+  environment:
+    TEMP: "{{user_home}}/apps/tmp"
+
+  tasks:
+
+     - include_role:
+         name: "../roles/loki"
+
+
+  gather_facts: true
+  post_tasks:
+    - include_role:
+        name: "../roles/post"
+      when: pod == 'QA'
