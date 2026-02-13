@@ -1,0 +1,9 @@
+apiVersion: pie.apple.com/v1alpha1
+kind: AppleNetworkPolicy
+metadata:
+  name: OVERWRITE_PER_APP
+spec:
+  selector:
+    sdr.appname: OVERWRITE_PER_APP
+  apps_incoming:
+    - app: plb.pie-plb.pie-prod
