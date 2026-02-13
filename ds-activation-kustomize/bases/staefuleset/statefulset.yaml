@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: OVERWRITE_PER_APP
+spec:
+  replicas: OVERWRITE_PER_ENV
+  selector:
+    matchLabels:
+      sdr.appname: OVERWRITE_PER_APP
+  serviceName: OVERWRITE_PER_APP
+  template:
+    metadata:
+      labels:
+        sdr.appname: OVERWRITE_PER_APP
+    spec:
+      securityContext:
+        fsGroup: 65532  
+      initContainers:
+        - image: "docker.apple.com/whisper-client/whisper-client:latest"
+          name: init-whisper-client
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          command: OVERWRITE_PER_APP
+          volumeMounts:
+            - mountPath: /opt/apps/etc/private
+              name: secrets
+            - mountPath: /identity
+              name: identity-certs
+              readOnly: true
+      containers:
+      - name: OVERWRITE_PER_APP
+        image: OVERWRITE_PER_ENV
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        resources:
+          limits:
+            cpu: OVERWRITE_PER_ENV
+            memory: OVERWRITE_PER_ENV
+          requests:
+            cpu: OVERWRITE_PER_ENV
+            memory: OVERWRITE_PER_ENV
+        env:
+          - name: JAVA_TOOL_OPTIONS
+            value: OVERWRITE_PER_ENV
+          - name: PLATFORM_JOB_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+        volumeMounts:
+        - mountPath: /app/bdb
+          name: OVERWRITE_PER_APP
+        - mountPath: /tmp
+          name: tmp
+        - mountPath: /app/keystores
+          name: keystores
+        - mountPath: /opt/apps/etc/private
+          name: secrets
+        - mountPath: /app/logs
+          name: app-logs
+        - mountPath: /identity
+          name: identity-certs
+          readOnly: true
+      - image: "docker.apple.com/splunk-ist/splunk-universalforwarder:latest"
+        name: splunk-forwarder
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        env:
+          - name: SPLUNK_CLUSTER
+            value: ioss_us1_prod
+          - name: SPLUNK_LOG_MONITOR_APPLOG
+            value: OVERWRITE_PER_ENV
+          - name: SPLUNK_LOG_MONITOR_ACCESSLOG
+            value: OVERWRITE_PER_ENV
+        volumeMounts:
+          - mountPath: /app/logs
+            name: app-logs
+          - mountPath: "/etc/splunk/podinfo"
+            name: podinfo
+            readOnly: true
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: keystores
+          emptyDir: {}
+        - name: secrets
+          emptyDir: {}
+        - name: app-logs
+          emptyDir: {}
+        - name: config
+          emptyDir: {}
+        - name: identity-certs
+          emptyDir: {}
+        - name: podinfo
+          downwardAPI:
+            items:
+              - path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels
+              - path: "uid"
+                fieldRef:
+                  fieldPath: metadata.uid
+      priorityClassName: OVERWRITE_PER_ENV    
+  volumeClaimTemplates:
+  - metadata:
+      name: OVERWRITE_PER_APP
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
