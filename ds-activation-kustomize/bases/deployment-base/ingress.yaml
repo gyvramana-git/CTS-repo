@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: OVERWRITE_PER_ENV
+  annotations:
+    kubernetes.io/ingress.class: "plb.v1"
+    pie.traffic.plb/managed_tcps: "true"
+    pie.traffic.plb/aliases: OVERWRITE_PER_ENV
+spec:
+  defaultBackend:
+    service:
+      name: OVERWRITE_PER_APP
+      port:
+        number: 8080

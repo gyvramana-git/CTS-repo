@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: splunkforwarder-egress
+spec:
+  podSelector:
+    matchLabels: {}
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  - ports:
+    - port: 8089
+      protocol: TCP
+    to:
+    - ipBlock:
+        cidr: 10.202.186.16/32
+    - ipBlock:
+        cidr: 10.202.184.21/32
+  - ports:
+    - port: 9998
+      protocol: TCP
+    to:
+    - ipBlock:
+        cidr: 17.111.124.0/23
+        
